@@ -56,7 +56,7 @@ class HomePageState extends State<HomePage> {
                 });
               },
               min: 0.0,
-              max: 500.0,
+              max: 100.0,
               sliderColor: Colors.redAccent,
               thumbColor: Colors.amber,
               start: Icon(
