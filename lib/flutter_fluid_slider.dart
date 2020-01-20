@@ -1,4 +1,5 @@
 import 'dart:ui' show lerpDouble;
+
 import 'package:flutter/material.dart';
 
 ///A fluid design slider that works just like the [Slider] material widget.
@@ -121,12 +122,17 @@ class FluidSlider extends StatefulWidget {
   ///If null the value is converted to String based on [showDecimalValue]
   final String Function(double) mapValueToString;
 
+  ///Step to make the slider to jump certain range
+  ///
+  /// defaults to one
+  final double step;
 
   const FluidSlider({
     Key key,
     @required this.value,
     this.min = 0.0,
     this.max = 1.0,
+    this.step = 1.0,
     this.start,
     this.end,
     @required this.onChanged,
@@ -144,6 +150,7 @@ class FluidSlider extends StatefulWidget {
         assert(min <= max),
         assert(value >= min && value <= max),
         super(key: key);
+
   @override
   _FluidSliderState createState() => _FluidSliderState();
 }
@@ -211,7 +218,7 @@ class _FluidSliderState extends State<FluidSlider>
     _currX = 0.0;
     _animationController.reverse();
   }
-  
+
   void _onHorizontalDragCancel() {
     if (widget.onChangeEnd != null) {
       _handleDragEnd(_clamp(_currX));
@@ -228,7 +235,13 @@ class _FluidSliderState extends State<FluidSlider>
     assert(widget.onChanged != null);
     final double lerpValue = _lerp(value);
     if (lerpValue != widget.value) {
-      widget.onChanged(lerpValue);
+      if (widget.step > 1) {
+        if (lerpValue % widget.step == 0) {
+          widget.onChanged(lerpValue);
+        } else {}
+      } else {
+        widget.onChanged(lerpValue);
+      }
     }
   }
 
@@ -394,10 +407,10 @@ class _FluidSliderState extends State<FluidSlider>
                         child: Center(
                           child: Text(
                             widget.mapValueToString != null
-                              ? widget.mapValueToString(widget.value)
-                              : widget.showDecimalValue
-                                  ? widget.value.toStringAsFixed(1)
-                                  : widget.value.toInt().toString(),
+                                ? widget.mapValueToString(widget.value)
+                                : widget.showDecimalValue
+                                    ? widget.value.toStringAsFixed(1)
+                                    : widget.value.toInt().toString(),
                             style: _currentValTextStyle(context),
                           ),
                         ),
@@ -416,6 +429,7 @@ class _FluidSliderState extends State<FluidSlider>
 
 class _ThumbSplashPainter extends CustomPainter {
   final Animation showContact;
+
   //This is passed to calculate and compensate the value
   //of x for drawing the sticky fluid
   final thumbPadding;
@@ -427,18 +441,8 @@ class _ThumbSplashPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     // print(size);
     if (showContact.value >= 0.5) {
-      final Offset center = Offset(size.width / 2, size.height / 2);
-
       final Path path = Path();
       path.moveTo(-0.0, size.height + 6.0);
-      path.quadraticBezierTo(
-          center.dx, size.height, thumbPadding / 2, center.dy);
-
-      path.lineTo(size.width - thumbPadding / 2, center.dy);
-
-      path.quadraticBezierTo(
-          center.dx, size.height, size.width + 0.0, size.height + 6.0);
-
       path.close();
       canvas.drawPath(path, Paint()..color = splashColor);
     }
@@ -463,6 +467,7 @@ class _MinMaxLabels extends StatelessWidget {
     this.value,
     this.padding,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(

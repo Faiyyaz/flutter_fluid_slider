@@ -34,6 +34,7 @@ class HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             FluidSlider(
+              step: 5,
               value: _value1,
               onChanged: (double newValue) {
                 setState(() {
@@ -47,6 +48,7 @@ class HomePageState extends State<HomePage> {
               height: 100.0,
             ),
             FluidSlider(
+              step: 10,
               value: _value2,
               onChanged: (double newValue) {
                 setState(() {
@@ -70,6 +72,7 @@ class HomePageState extends State<HomePage> {
               height: 100.0,
             ),
             FluidSlider(
+                step: 1,
                 value: _value3,
                 sliderColor: Colors.purple,
                 onChanged: (double newValue) {
