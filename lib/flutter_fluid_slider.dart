@@ -249,7 +249,7 @@ class _FluidSliderState extends State<FluidSlider>
 
   double _range(double value, double divisions) {
     double x = value - widget.min;
-    double range = widget.max - widget.min;
+    double range = widget.max;
     double result = x / range;
     return (result * divisions).round() / divisions * range + widget.min;
   }
