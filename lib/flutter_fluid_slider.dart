@@ -132,6 +132,11 @@ class FluidSlider extends StatefulWidget {
   /// default to zero
   final double cornerRadius;
 
+  ///Outline radius circle
+  ///
+  /// defaults to one
+  final double outlineRadius;
+
   const FluidSlider({
     Key key,
     @required this.value,
@@ -139,6 +144,7 @@ class FluidSlider extends StatefulWidget {
     this.max = 1.0,
     this.step = 1.0,
     this.cornerRadius = 0.0,
+    this.outlineRadius = 1.0,
     this.start,
     this.end,
     @required this.onChanged,
@@ -410,8 +416,8 @@ class _FluidSliderState extends State<FluidSlider>
                       ),
                       alignment: Alignment.center,
                       child: Container(
-                        width: 0.90 * thumbDiameter,
-                        height: 0.90 * thumbDiameter,
+                        width: widget.outlineRadius * thumbDiameter,
+                        height: widget.outlineRadius * thumbDiameter,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: _thumbColor,
