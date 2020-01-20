@@ -137,6 +137,21 @@ class FluidSlider extends StatefulWidget {
   /// defaults to one
   final double outlineRadius;
 
+  /// The minimum value label.
+  ///
+  /// Defaults to min
+  final String minLabel;
+
+  /// The maximum value label.
+  ///
+  /// Defaults to max
+  final String maxLabel;
+
+  /// The should show label.
+  ///
+  /// Defaults to false
+  final bool shouldLabel;
+
   const FluidSlider({
     Key key,
     @required this.value,
@@ -147,6 +162,9 @@ class FluidSlider extends StatefulWidget {
     this.outlineRadius = 1.0,
     this.start,
     this.end,
+    this.minLabel,
+    this.maxLabel,
+    this.shouldLabel = false,
     @required this.onChanged,
     this.labelsTextStyle,
     this.valueTextStyle,
@@ -383,14 +401,14 @@ class _FluidSliderState extends State<FluidSlider>
                 textStyle: widget.labelsTextStyle,
                 alignment: Alignment.centerLeft,
                 child: widget.start,
-                value: widget.min,
+                value: widget.minLabel ?? widget.min.toString(),
                 padding: EdgeInsets.only(left: 15.0),
               ),
               _MinMaxLabels(
                 textStyle: widget.labelsTextStyle,
                 alignment: Alignment.centerRight,
                 child: widget.end,
-                value: widget.max,
+                value: widget.maxLabel ?? widget.max.toString(),
                 padding: EdgeInsets.only(right: 15.0),
               ),
               PositionedTransition(
@@ -423,14 +441,7 @@ class _FluidSliderState extends State<FluidSlider>
                           color: _thumbColor,
                         ),
                         child: Center(
-                          child: Text(
-                            widget.mapValueToString != null
-                                ? widget.mapValueToString(widget.value)
-                                : widget.showDecimalValue
-                                    ? widget.value.toStringAsFixed(1)
-                                    : widget.value.toInt().toString(),
-                            style: _currentValTextStyle(context),
-                          ),
+                          child: _getCircleText(),
                         ),
                       ),
                     ),
@@ -442,6 +453,49 @@ class _FluidSliderState extends State<FluidSlider>
         );
       },
     );
+  }
+
+  _getCircleText() {
+    if (widget.shouldLabel) {
+      String value = widget.mapValueToString != null
+          ? widget.mapValueToString(widget.value)
+          : widget.showDecimalValue
+              ? widget.value.toStringAsFixed(1)
+              : widget.value.toInt().toString();
+
+      if (widget.min != null && widget.max != null) {
+        if (double.parse(value) == widget.min) {
+          return Text(
+            widget.minLabel,
+            style: _currentValTextStyle(context),
+          );
+        } else if (double.parse(value) == widget.max) {
+          return Text(
+            widget.maxLabel,
+            style: _currentValTextStyle(context),
+          );
+        } else {
+          return Text(
+            value,
+            style: _currentValTextStyle(context),
+          );
+        }
+      } else {
+        return Text(
+          value,
+          style: _currentValTextStyle(context),
+        );
+      }
+    } else {
+      return Text(
+        widget.mapValueToString != null
+            ? widget.mapValueToString(widget.value)
+            : widget.showDecimalValue
+                ? widget.value.toStringAsFixed(1)
+                : widget.value.toInt().toString(),
+        style: _currentValTextStyle(context),
+      );
+    }
   }
 }
 
@@ -474,7 +528,7 @@ class _MinMaxLabels extends StatelessWidget {
   final Alignment alignment;
   final TextStyle textStyle;
   final Widget child;
-  final double value;
+  final String value;
   final EdgeInsets padding;
 
   const _MinMaxLabels({
@@ -494,7 +548,7 @@ class _MinMaxLabels extends StatelessWidget {
         alignment: alignment,
         child: child ??
             Text(
-              '${value.toInt()}',
+              '$value',
               style: textStyle ?? Theme.of(context).accentTextTheme.title,
             ),
       ),
