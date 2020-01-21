@@ -457,6 +457,8 @@ class _FluidSliderState extends State<FluidSlider>
 
   _getCircleText() {
     if (widget.shouldLabel) {
+      String text;
+
       String value = widget.mapValueToString != null
           ? widget.mapValueToString(widget.value)
           : widget.showDecimalValue
@@ -465,27 +467,20 @@ class _FluidSliderState extends State<FluidSlider>
 
       if (widget.min != null && widget.max != null) {
         if (double.parse(value) == widget.min) {
-          return Text(
-            widget.minLabel,
-            style: _currentValTextStyle(context),
-          );
+          text = widget.minLabel;
         } else if (double.parse(value) == widget.max) {
-          return Text(
-            widget.maxLabel,
-            style: _currentValTextStyle(context),
-          );
+          text = widget.maxLabel;
         } else {
-          return Text(
-            value,
-            style: _currentValTextStyle(context),
-          );
+          text = value;
         }
       } else {
-        return Text(
-          value,
-          style: _currentValTextStyle(context),
-        );
+        text = value;
       }
+
+      return Text(
+        text,
+        style: _currentValTextStyle(context),
+      );
     } else {
       return Text(
         widget.mapValueToString != null

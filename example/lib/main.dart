@@ -42,7 +42,7 @@ class HomePageState extends State<HomePage> {
                 });
               },
               min: 0.0,
-              max: 100.0,
+              max: 50.0,
               shouldLabel: true,
               minLabel: 'Min',
               maxLabel: 'Max',
