@@ -34,7 +34,7 @@ class HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             FluidSlider(
-              step: 5,
+              step: 1,
               value: _value1,
               onChanged: (double newValue) {
                 setState(() {
@@ -42,7 +42,7 @@ class HomePageState extends State<HomePage> {
                 });
               },
               min: 0.0,
-              max: 50.0,
+              max: 100.0,
               shouldLabel: true,
               minLabel: 'Min',
               maxLabel: 'Max',

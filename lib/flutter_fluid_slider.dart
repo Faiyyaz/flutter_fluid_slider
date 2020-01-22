@@ -266,11 +266,7 @@ class _FluidSliderState extends State<FluidSlider>
     final double lerpValue = _lerp(value);
     if (lerpValue != widget.value) {
       if (widget.step > 1) {
-        if (lerpValue % widget.step == 0) {
-          widget.onChanged(lerpValue);
-        } else {
-          widget.onChanged(_range(lerpValue, widget.max / widget.step));
-        }
+        widget.onChanged(_range(lerpValue, widget.max / widget.step));
       } else {
         widget.onChanged(lerpValue);
       }
